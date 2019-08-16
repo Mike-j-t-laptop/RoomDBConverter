@@ -17,3 +17,4 @@ Changes/omissions that will be made will be highlighted
 Clicking the CONVERT button converts the database and creates the java code for the Room @Entity and for a basic DAO, one of each for each table.
 The converted database can then be copied into the asset folder of the App being developed (e.g. via AS's Device Explorer), the java code can also be copied (the package and imports need to then be added) and then the Database should be usable in the App using Room.
 
+Note! still experimental (has been used to convert the Chinook database)
