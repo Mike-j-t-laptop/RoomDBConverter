@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">SO57035497RoomAssetConvert</string>
+    <string name="app_name_short">RoomAssetConvert</string>
+    <string name="main_title">Room Asset Conversion Tool</string>
+    <string name="assetlistviewheader">Assets found (click an Asset to select/load)</string>
+    <string name="selectedassetdbinfoheading">Selected Database Information</string>
+    <string name="convertbutton">CONVERT</string>
+    <string name="donebutton">DONE</string>
+    <string name="applychangesbutton">APPLY CHANGES</string>
+    <string name="dbname">Name</string>
+    <string name="dbpath">Path</string>
+    <string name="dbversion">Version</string>
+    <string name="dbdisksize">Size</string>
+    <string name="dbtablecount">Tables</string>
+    <string name="dbcolumncount">Columns</string>
+    <string name="dbindexcount">Indexes</string>
+    <string name="dbindexcolumncount">IndexColumns</string>
+    <string name="dbtriggercount">Triggers</string>
+    <string name="dbviewcount">Views</string>
+    <string name="dbforeignkeycount">FK</string>
+
+
+    <string name="entitywarningroommastertable">Indicates a room master table, this will be omitted from the converted database.</string>
+    <string name="entitywarningautoincrementadd">AUTOINCREMENT will be added.</string>
+    <string name="entitywarningnumerictype">NUMERIC type detected. Using TEXT and therefore object meber will be String </string>
+    <string name="entitywarningdefaultvalue">A default value has been detected. You may wish to set the object member to default to the value.</string>
+    <string name="entitywarningnoprimarykey">Room requires all entities (tables) to have a primary key. Will generate primary key from all columns.</string>
+    <string name="entitywarningderivedtype">The specified type affinity is not usable in Room, the derived type will be used (if not NUMERIC).</string>
+
+    <string name="entitySQL">SQL</string>
+    <string name="entitytablenamehdr">Table Name</string>
+    <string name="entitytableenclosednamehdr">Encl Table Name</string>
+    <string name="entitytablecolcounthdr">Columns</string>
+    <string name="entitytablefkeyscounthdr">FKeys</string>
+    <string name="entitytabletriggercounthdr">Triggers</string>
+    <string name="entitytableindexescounthdr">Indexes</string>
+    <string name="entitytableprimarykeyshdr">Primary Keys</string>
+
+    <string name="entitycolumnnamehdr">Column Name</string>
+    <string name="entitycolumntypehdr">Type</string>
+    <string name="entitycolumnderivedtypehdr">Derived</string>
+    <string name="entitycolumnfinaltypehdr">Final</string>
+    <string name="entitycolumnnotnullhdr">NotNull</string>
+    <string name="entitycolumnuniquehdr">Unique</string>
+    <string name="entitycolumnrowidaliashdr">Rowid Alias</string>
+    <string name="entitycolumnautoincrementcoded">AutoIncrement Coded</string>
+    <string name="entitycolumndefaultvaluehdr">Default</string>
+    <string name="entityaltcolumnnamehdr">Encl Col Name</string>
+    <string name="entitycolumnobjectelementtype">Object Element Type</string>
+    <string name="entitycannotbechanged">Cannot be edited here.</string>
+
+    <string name="entityfkeyname">Foreign Key Name</string>
+    <string name="entityfkeyparenttablenamehdr">Parent Table</string>
+    <string name="entityfkeychildtablenamehdr">Child Table</string>
+    <string name="entityfkeyparentcolumnshdr">Parent Columns</string>
+    <string name="entityfkeychildcolumnshdr">Child Columns</string>
+    <string name="entityfkeyonupdateactionhdr">OnUpdate Action</string>
+    <string name="entityfkeyondeleteactionhdr">On Delete Action</string>
+    <string name="entityfkeydeferrableflaghdr">Deferrable</string>
+
+    <string name="entitytriggernamehdr">Trigger Name</string>
+    <string name="entitytriggertablenamehdr">Table Name</string>
+
+    <string name="entityviewnamehdr">View Name</string>
+
+    <array name="entitytypes">
+        <item>Tables</item>
+        <item>Columns</item>
+        <item>Indexes</item>
+        <item>Triggers</item>
+        <item>Views</item>
+        <item>Foreign Keys</item>
+    </array>
+</resources>
