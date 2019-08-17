@@ -7,13 +7,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.Serializable;
@@ -40,10 +44,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     Context mContext;
     Button mConvert;
     ListView mDBAssetsListView, mDBEntityLisView;
-    LinearLayout mDBInfoHdr, mDBInfo,  mDBPathInfoHdr;
+    LinearLayout mDBInfoHdr, mDBInfo,  mDBPathInfoHdr, mConvertSection;
     TextView mSelectedDBInfoHdr, mDBName, mDBVersion,  mDBDiskSize, mDBPath,
             mDBTablesHdr, mDBColumnsHdr, mDBIndexesHdr, mDBFrgnKeysHdr, mDBTriggersHdr,mDBViewsHdr,
             mDBTables,mDBColumns, mDBIndexes, mDBFrgnKeys, mDBTriggers, mDBViews, mDBEntitiesListHdr;
+    EditText mConversionDirectoryEditText, mConversionEntityDirectoryEditText, mConversionDaoDirectoryEditText;
 
     ArrayList<AssetEntry> mDBAssets;
     ArrayAdapter<AssetEntry> mDBAssetsAA;
@@ -98,16 +103,56 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mDBViewsHdr = this.findViewById(R.id.dbviewcounthdr);
         (mDBPathInfoHdr = this.findViewById(R.id.pathinfosection)).setVisibility(View.GONE);
         (mDBEntitiesListHdr = this.findViewById(R.id.dbentitieslisthdr)).setVisibility(View.GONE);
+        (mConvertSection = this.findViewById(R.id.convert_linear_layout)).setVisibility(View.GONE);
+        mConversionDirectoryEditText = this.findViewById(R.id.conversion_directory);
+        mConversionEntityDirectoryEditText = this.findViewById(R.id.conversion_entity_directory);
+        mConversionDaoDirectoryEditText = this.findViewById(R.id.conversion_dao_directory);
+
         manageDBAssetsListView();
         manageDatabaseInformationListeners();
+        manageConvertButton();
+        manageConversionEditTexts();
         mDBAssets = RetrieveDBAssets.getAssets(this);
+
+    }
+
+    private void manageConversionEditTexts() {
+        mConversionDirectoryEditText.addTextChangedListener(new CustomTextWatcher());
+        mConversionEntityDirectoryEditText.addTextChangedListener(new CustomTextWatcher());
+        mConversionDaoDirectoryEditText.addTextChangedListener(new CustomTextWatcher());
+    }
+
+    private void manageConvertButton() {
+
         mConvert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mConversionDirectoryEditText.getText().toString().length() < 1) {
+                    Toast.makeText(v.getContext(),getResources().getString(R.string.convert_directory_empty),Toast.LENGTH_SHORT).show();
+                    mConversionDirectoryEditText.requestFocus();
+                    return;
+                }
+                if (mConversionEntityDirectoryEditText.getText().toString().length() < 1) {
+                    Toast.makeText(v.getContext(),getResources().getString(R.string.convert_entity_directory_empty),Toast.LENGTH_SHORT).show();
+                    mConversionEntityDirectoryEditText.requestFocus();
+                    return;
+                }
+                if (mConversionDaoDirectoryEditText.getText().toString().length() < 1) {
+                    Toast.makeText(v.getContext(),getResources().getText(R.string.convert_dao_directory_empty),Toast.LENGTH_SHORT).show();
+                    mConversionDaoDirectoryEditText.requestFocus();
+                    return;
+                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        showConversionResults((ConvertPreExistingDatabaseToRoom.Convert(mContext,mCurrentPEADBI,mConversionDirectory,mEntityDirectory,mDAODirectory,ConvertPreExistingDatabaseToRoom.MESSAGELEVEL_ERROR)== 0));
+
+                        showConversionResults(
+                                (
+                                        ConvertPreExistingDatabaseToRoom.Convert(
+                                                mContext,mCurrentPEADBI,
+                                                mConversionDirectoryEditText.getText().toString(),
+                                                mConversionEntityDirectoryEditText.getText().toString(),
+                                                mDAODirectory,ConvertPreExistingDatabaseToRoom.MESSAGELEVEL_ERROR)== 0));
                         /* //TODO remove commented out code when tested
                         if (ConvertPreExistingDatabaseToRoom.Convert(mContext,mCurrentPEADBI,"MyConversion20190815_12:16","java","java",ConvertPreExistingDatabaseToRoom.MESSAGELEVEL_ERROR) ==0) {
                             showConversionResults();
@@ -120,6 +165,17 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 }).start();
             }
         });
+    }
+
+    private void setConvertButtonFocusability() {
+        int cdetLength = mConversionDirectoryEditText.getText().toString().length();
+        int cedetLength = mConversionEntityDirectoryEditText.getText().toString().length();
+        int cddetLength = mConversionDaoDirectoryEditText.getText().toString().length();
+        if (cdetLength > 0 && cedetLength > 0 && cddetLength > 0){
+            mConvert.setVisibility(View.VISIBLE);
+        } else {
+            mConvert.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -365,7 +421,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             mCurrentPEADBI = mPEADBIList.get(i);
         }
         mConversionDirectory = getResources().getString(R.string.convert_main_directory_prefix) + mCurrentPEADBI.getDatabaseName();
-        mConvert.setVisibility(View.VISIBLE);
+        mConvertSection.setVisibility(View.VISIBLE);
+        mConversionDirectoryEditText.setText(mConversionDirectory);
+        mConversionEntityDirectoryEditText.setText(mEntityDirectory);
+        mConversionDaoDirectoryEditText.setText(mDAODirectory);
         mSelectedDBInfoHdr.setVisibility(View.VISIBLE);
         mDBInfo.setVisibility(View.VISIBLE);
         mDBInfoHdr.setVisibility(View.VISIBLE);
@@ -545,6 +604,22 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 alertDialog.show();
             }
         });
+    }
+
+    private class CustomTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            setConvertButtonFocusability();
+        }
+
     }
 
 
