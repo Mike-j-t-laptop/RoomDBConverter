@@ -5,6 +5,15 @@
     <string name="assetlistviewheader">Assets found (click an Asset to select/load)</string>
     <string name="selectedassetdbinfoheading">Selected Database Information</string>
     <string name="convertbutton">CONVERT</string>
+    <string name="convert_result_ok">Successfully Converted</string>
+    <string name="convert_result_not_ok">Issues Converting</string>
+    <string name="convert_main_directory_prefix">Convert_</string>
+    <string name="convert_directory_label">Conversion Directory</string>
+    <string name="convert_entity_directory_label">Entity Sub-Directory</string>
+    <string name="convert_dao_subdirectory_label">DAO Sub-Directory</string>
+    <string name="convert_directory_empty">The Conversion Directory is Empty. Please supply a valid directory name for the conversion.</string>
+    <string name="convert_entity_directory_empty">The Conversion Entity Directory is Empty. Please supply a valid directorty name for the conversion.</string>
+    <string name="convert_dao_directory_empty">The Conversion Dao Entity Directory is Empty. Please supply a valid directory name for the conversion.</string>
     <string name="donebutton">DONE</string>
     <string name="applychangesbutton">APPLY CHANGES</string>
     <string name="dbname">Name</string>
