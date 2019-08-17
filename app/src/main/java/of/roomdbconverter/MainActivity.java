@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     ArrayList<ViewInfo> mCurrentViews;
     PreExistingAssetDBInspect mCurrentPEADBI;
 
+    String mConversionDirectory = "", mEntityDirectory = "java", mDAODirectory = mEntityDirectory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,11 +107,14 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        showConversionResults((ConvertPreExistingDatabaseToRoom.Convert(mContext,mCurrentPEADBI,mConversionDirectory,mEntityDirectory,mDAODirectory,ConvertPreExistingDatabaseToRoom.MESSAGELEVEL_ERROR)== 0));
+                        /* //TODO remove commented out code when tested
                         if (ConvertPreExistingDatabaseToRoom.Convert(mContext,mCurrentPEADBI,"MyConversion20190815_12:16","java","java",ConvertPreExistingDatabaseToRoom.MESSAGELEVEL_ERROR) ==0) {
                             showConversionResults();
                         } else {
                             showConversionResults();
                         }
+                        */
 
                     }
                 }).start();
@@ -343,7 +348,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         if (mPEADBIList == null) {
             mPEADBIList = new ArrayList<>();
         }
-        //Toast.makeText(this,"You clicked on DB " + ae.getAssetName() + " in path " + ae.getAssetPath(),Toast.LENGTH_SHORT).show();
         boolean stored = false;
         int i =0;
         for (PreExistingAssetDBInspect p: mPEADBIList ) {
@@ -360,6 +364,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         } else {
             mCurrentPEADBI = mPEADBIList.get(i);
         }
+        mConversionDirectory = getResources().getString(R.string.convert_main_directory_prefix) + mCurrentPEADBI.getDatabaseName();
+        mConvert.setVisibility(View.VISIBLE);
         mSelectedDBInfoHdr.setVisibility(View.VISIBLE);
         mDBInfo.setVisibility(View.VISIBLE);
         mDBInfoHdr.setVisibility(View.VISIBLE);
@@ -508,7 +514,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
     }
 
-    public void showConversionResults() {
+    public void showConversionResults(final boolean issues) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -523,6 +529,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                                 + ".\n\n"
                         );
                 AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                if (issues) {
+                    alertDialog.setTitle(getResources().getString(R.string.convert_result_not_ok));
+                } else {
+                    alertDialog.setTitle(getResources().getString(R.string.convert_result_ok));
+                }
                 alertDialog.setTitle("Result");
                 alertDialog.setMessage(preamble + ConvertPreExistingDatabaseToRoom.getMessagesAsString());
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
@@ -535,6 +546,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             }
         });
     }
+
 
     @Override
     protected void onStop() {
