@@ -11,6 +11,7 @@
     <color name="colorTextWarningLow">#FFFF9955</color>
     <color name="colorMainHeadingBackground">#FF0000FF</color>
     <color name="colorSQL">#FF0000FF</color>
+    <color name="colorConvertSectionBackground">#FFFFDDDD</color>
     <color name="colorAssetHeadingBackground">#FFAAAAFF</color>
     <color name="colorAssetListBackground">#FFEEEEFF</color>
     <color name="colorDatabaseInfoHeadingBackground">#FFAAFFAA</color>
