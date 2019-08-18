@@ -48,7 +48,11 @@ public class ColumnInfo implements java.io.Serializable {
                       boolean notNull, int cid, int primaryKeyPosition, String defaultValue, boolean unique, boolean rowidAlias, boolean autoIncCoded, String SQL,
                       String originalColumnName, String originalAlternativeColumnName) {
         this.mColumnName = columnName;
-        this.mAlternativeColumnName = alternativeColumnName;
+        if (alternativeColumnName != null) {
+            this.mAlternativeColumnName = alternativeColumnName;
+        } else {
+            this.mAlternativeColumnName = "";
+        }
 
         // If the original name has been supplied (is greater then 0 characters in length)
         // then set the original name to the supplied name

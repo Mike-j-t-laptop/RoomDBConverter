@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">SO57035497RoomAssetConvert</string>
-    <string name="app_name_short">RoomAssetConvert</string>
+    <string name="app_name">RoomDBConverter</string>
+    <string name="app_name_short">RoomDBConverter</string>
     <string name="main_title">Room Asset Conversion Tool</string>
     <string name="assetlistviewheader">Assets found (click an Asset to select/load)</string>
     <string name="selectedassetdbinfoheading">Selected Database Information</string>

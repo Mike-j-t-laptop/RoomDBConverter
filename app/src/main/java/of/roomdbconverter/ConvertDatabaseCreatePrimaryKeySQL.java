@@ -10,7 +10,6 @@ public class ConvertDatabaseCreatePrimaryKeySQL {
     private static final String PRIMARYKEYCLAUSEEND = ")";
     public static String getPrimaryKeyClause(PreExistingAssetDBInspect peadbi, TableInfo ti) {
         StringBuilder pkeys = new StringBuilder();
-        boolean hasrowidalias = false;
         for (ColumnInfo ci: ti.getColumns()) {
             if (ci.isRowidAlias() || ci.isAutoIncrementCoded()) return "";
         }
@@ -30,6 +29,11 @@ public class ConvertDatabaseCreatePrimaryKeySQL {
                 pkeys.append(",");
             }
             ColumnInfo ci = ti.getColumnInfoByName(s);
+
+            //TODO java.lang.NullPointerException: Attempt to invoke virtual method
+            // 'java.lang.String of.roomdbconverter.ColumnInfo.getAlternativeColumnName()' on a null object reference
+            // Encounterd on dictionary.db (unable to recreate??????????)
+            if (ci == null ) continue; //TODO temporary fix as can't appear to fix
             columnNameToCode = swapEnclosersForRoom(ci.getAlternativeColumnName());
             if (columnNameToCode.length() < 1) {
                 columnNameToCode = ci.getColumnName();

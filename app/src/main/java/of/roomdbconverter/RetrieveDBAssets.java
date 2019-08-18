@@ -21,13 +21,6 @@ public class RetrieveDBAssets {
         AssetManager am = context.getAssets();
         //getAssetEntries(context,"",am);
         getAssets(context,"");
-        /*
-        for (HashMap.Entry<String, AssetEntry> h: assethashmap.entrySet()) {
-            if (h.getValue().getAssetType() == AssetEntry.ASSETTYPE_SQLITEDB) {
-                dbassets.add(h.getValue());
-            }
-        }
-        */
         return dbassets;
     }
 
@@ -71,6 +64,8 @@ public class RetrieveDBAssets {
     }
 
 
+    /*
+    //TODO remove commented out section when tested working without
 
     private static void getAssetEntries(Context context, String path, AssetManager am) {
         String[] assetlist;
@@ -119,4 +114,5 @@ public class RetrieveDBAssets {
             e.printStackTrace();
         }
     }
+    */
 }
