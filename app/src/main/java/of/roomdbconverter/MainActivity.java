@@ -25,6 +25,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
 
+    public static final String BASECONVERTDIRECTORY = "RoomDBConverterDBConversions";
+
     public static final int REQUESTCODE_TABLEINFO = 99;
     public static final int REQUESTCODE_COLUMNINFO = 98;
     public static final String INTENTKEY_TABLEINFO = "ik_tableinfo";
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     EditText mConversionDirectoryEditText, mConversionEntityDirectoryEditText, mConversionDaoDirectoryEditText;
 
     ArrayList<AssetEntry> mDBAssets;
+    ArrayList<File> mDBFiles;
     ArrayAdapter<AssetEntry> mDBAssetsAA;
     EntityTableAdapter mDBTablesAA;
     EntityColumnAdapter mDBColumnsAA;
@@ -113,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         manageConvertButton();
         manageConversionEditTexts();
         mDBAssets = RetrieveDBAssets.getAssets(this);
+        mDBFiles = RetrieveDBFiles.getFiles();
 
     }
 
@@ -149,18 +153,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         showConversionResults(
                                 (
                                         ConvertPreExistingDatabaseToRoom.Convert(
-                                                mContext,mCurrentPEADBI,
+                                                mContext,mCurrentPEADBI, BASECONVERTDIRECTORY + File.separator +
                                                 mConversionDirectoryEditText.getText().toString(),
                                                 mConversionEntityDirectoryEditText.getText().toString(),
                                                 mDAODirectory,ConvertPreExistingDatabaseToRoom.MESSAGELEVEL_ERROR)== 0));
-                        /* //TODO remove commented out code when tested
-                        if (ConvertPreExistingDatabaseToRoom.Convert(mContext,mCurrentPEADBI,"MyConversion20190815_12:16","java","java",ConvertPreExistingDatabaseToRoom.MESSAGELEVEL_ERROR) ==0) {
-                            showConversionResults();
-                        } else {
-                            showConversionResults();
-                        }
-                        */
-
                     }
                 }).start();
             }

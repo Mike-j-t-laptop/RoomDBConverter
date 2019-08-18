@@ -27,7 +27,7 @@ public class ConvertPreExistingDatabaseToRoom {
     public static final int MESSAGELEVEL_WARNING = 1;
     public static final int MESSAGELEVEL_ERROR = 3;
     private static final String[] sMessageType = new String[]{"INFO    -","WARNING -","ERROR   -"};
-    private static String sConversionDirectory = "Convert_";
+    private static String sConversionDirectory = MainActivity.BASECONVERTDIRECTORY + File.separator + "Convert_";
     private static String sEntityCodeSubDirectory = "RoomEntities";
     private static String sDAOCodeSubDirectory = "RoomDao";
     private static int sLoggingLevel = MESSAGELEVEL_ERROR;
@@ -204,6 +204,9 @@ public class ConvertPreExistingDatabaseToRoom {
                 continue;
             }
             String tableNameToCode = swapEnclosersForRoom(ti.getEnclosedTableName());
+            if (tableNameToCode.length() < 1) {
+                tableNameToCode = swapEnclosersForRoom(ti.getTableName());
+            }
             String tableCreateSQL = ConvertedDatabaseCreateTableSQL.createTableCreateSQL(peadbi,ti);
 
             try {
