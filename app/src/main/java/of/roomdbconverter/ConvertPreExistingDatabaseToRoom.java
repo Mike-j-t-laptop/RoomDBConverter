@@ -40,7 +40,7 @@ public class ConvertPreExistingDatabaseToRoom {
 
     private static ArrayList<Message> sMessages;
 
-    public static int Convert(Context context, PreExistingAssetDBInspect peadbi, String conversionDirectory, String entityCodeSubDirectory, String daoCodeSubDirectory, int logging_level) {
+    public static int Convert(Context context, PreExistingFileDBInspect peadbi, String conversionDirectory, String entityCodeSubDirectory, String daoCodeSubDirectory, int logging_level) {
         sLoggingLevel = logging_level;
         int resultcode = RESULTCODE_NOTHINGDONE;
         sMessages = new ArrayList<>();
@@ -85,7 +85,7 @@ public class ConvertPreExistingDatabaseToRoom {
         }
         resultcode--;
         if (!createConvertedDatabase(peadbi)){
-            addMessage( new Message(7,MESSAGELEVEL_ERROR,"Error(s) converting the Database from " + peadbi.getAssetPath() + " to " + peadbi.getDatabasePath()));
+            addMessage( new Message(7,MESSAGELEVEL_ERROR,"Error(s) converting the Database from " + peadbi.getDatabasePath() + " to " + peadbi.getDatabasePath()));
             return resultcode;
         } else {
             addMessage(new Message(8,MESSAGELEVEL_INFO,
@@ -96,15 +96,15 @@ public class ConvertPreExistingDatabaseToRoom {
         return 0;
     }
 
-    public static int Convert(Context context, PreExistingAssetDBInspect peadbi) {
+    public static int Convert(Context context, PreExistingFileDBInspect peadbi) {
         return Convert(context, peadbi,null,null,null,MESSAGELEVEL_WARNING);
     }
 
-    public static int DebugConvert(Context context, PreExistingAssetDBInspect peadbi) {
+    public static int DebugConvert(Context context, PreExistingFileDBInspect peadbi) {
         return Convert(context,peadbi,null,null,null,MESSAGELEVEL_INFO);
     }
 
-    public static int DebugConvert(Context context, PreExistingAssetDBInspect peadbi, String conversionDirectory, String entitySubDirectory, String daoSubDirectory) {
+    public static int DebugConvert(Context context, PreExistingFileDBInspect peadbi, String conversionDirectory, String entitySubDirectory, String daoSubDirectory) {
         return Convert(context, peadbi, conversionDirectory, entitySubDirectory,daoSubDirectory, MESSAGELEVEL_INFO);
     }
 
@@ -130,7 +130,7 @@ public class ConvertPreExistingDatabaseToRoom {
      * @param peadbi    The PreExistingAssetDatabaseInspect object (i.e. all the database information)
      * @return          false if an io-error, else true
      */
-    private static boolean buildEntityFiles(PreExistingAssetDBInspect peadbi) {
+    private static boolean buildEntityFiles(PreExistingFileDBInspect peadbi) {
         ArrayList<String> code;
         for (TableInfo ti: peadbi.getTableInfo()) {
             File currentEntity = new File(ecsd.getPath() + File.separator + capitalise(ti.getTableName()) + ".java");
@@ -157,7 +157,7 @@ public class ConvertPreExistingDatabaseToRoom {
      * @param peadbi    The PreExisitingAssetDatabaseInspection object
      * @return          true if the files were successfully generated, else false
      */
-    private static boolean buildDaoFiles(PreExistingAssetDBInspect peadbi) {
+    private static boolean buildDaoFiles(PreExistingFileDBInspect peadbi) {
         ArrayList<String> code;
         for (TableInfo ti: peadbi.getTableInfo()) {
             File currentDao = new File(daocd.getPath() + File.separator + capitalise(ti.getTableName()) + DAOEXTENSION + ".java");
@@ -179,7 +179,7 @@ public class ConvertPreExistingDatabaseToRoom {
 
     private static final String INSPECTDBATTACHNAME = "inspectdb";
 
-    private static boolean createConvertedDatabase(PreExistingAssetDBInspect peadbi) {
+    private static boolean createConvertedDatabase(PreExistingFileDBInspect peadbi) {
         peadbi.closeInspectionDatabase();
         boolean rv = true;
         String TAG = "CRTCNVRTDB";

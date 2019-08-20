@@ -18,7 +18,7 @@ public class ConvertDatabaseCreateForeignKeySQL {
      * @param ti        The TableInfo object
      * @return          The ForeignKey clauses
      */
-    public static String getForeignKeyClauses(PreExistingAssetDBInspect peadbi, TableInfo ti) {
+    public static String getForeignKeyClauses(PreExistingFileDBInspect peadbi, TableInfo ti) {
         StringBuilder fkeys = new StringBuilder();
         for (ForeignKeyInfo fki: ti.getForeignKeyList()) {
             if (fkeys.length() > 0) {

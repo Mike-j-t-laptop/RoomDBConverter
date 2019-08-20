@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 public class RetrieveDBFiles {
 
-    private static ArrayList<File> dbfiles;
+    private static ArrayList<FileEntry> dbfiles;
 
-    public static ArrayList<File> getFiles() {
+    public static ArrayList<FileEntry> getFiles() {
         dbfiles = new ArrayList<>();
         createConverterBaseDirectories();
         getFiles(Environment.getExternalStoragePublicDirectory("").getPath());
@@ -48,7 +48,7 @@ public class RetrieveDBFiles {
                 Log.d("GETFILES","Checking File "+ f.getPath());
                 if (isFileSQLiteDatabase(f)) {
                     Log.d("GETFILES", "SQLITEDATABASE FOUND AT " + f.getPath());
-                    dbfiles.add(f);
+                    dbfiles.add(new FileEntry(f));
                 }
             }
         }

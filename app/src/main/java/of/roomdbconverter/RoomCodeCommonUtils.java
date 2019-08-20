@@ -40,7 +40,7 @@ public class RoomCodeCommonUtils {
      * @param tableName     The TableName to be located
      * @return              The TableInfo object
      */
-    public static TableInfo getParentTable(PreExistingAssetDBInspect peadbi, String tableName) {
+    public static TableInfo getParentTable(PreExistingFileDBInspect peadbi, String tableName) {
         for(TableInfo ti: peadbi.getTableInfo()) {
             if (ti.getTableName().equals(tableName)) {
                 return ti;

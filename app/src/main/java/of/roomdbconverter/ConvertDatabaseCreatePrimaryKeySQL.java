@@ -8,7 +8,7 @@ public class ConvertDatabaseCreatePrimaryKeySQL {
 
     private static final String PRIMARYKEYCLAUSESTART = "PRIMARY KEY (";
     private static final String PRIMARYKEYCLAUSEEND = ")";
-    public static String getPrimaryKeyClause(PreExistingAssetDBInspect peadbi, TableInfo ti) {
+    public static String getPrimaryKeyClause(PreExistingFileDBInspect peadbi, TableInfo ti) {
         StringBuilder pkeys = new StringBuilder();
         for (ColumnInfo ci: ti.getColumns()) {
             if (ci.isRowidAlias() || ci.isAutoIncrementCoded()) return "";

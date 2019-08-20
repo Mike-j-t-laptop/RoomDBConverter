@@ -65,7 +65,7 @@ public class RoomEntityBuilder {
      * @param ti        The TableInformation
      * @return          The generated code
      */
-    public static ArrayList<String> extractEntityCode(PreExistingAssetDBInspect peadbi, TableInfo ti) {
+    public static ArrayList<String> extractEntityCode(PreExistingFileDBInspect peadbi, TableInfo ti) {
 
         String primaryKeysCode = buildPrimaryKeysIfAny(ti);
         String indiciesCode = buildIndexes(peadbi, ti);
@@ -189,7 +189,7 @@ public class RoomEntityBuilder {
      * @param ti        The TableInfo object
      * @return          The ROOM indicies clause to be embedded in the @Entity for the table
      */
-    private static String buildIndexes(PreExistingAssetDBInspect peadbi, TableInfo ti) {
+    private static String buildIndexes(PreExistingFileDBInspect peadbi, TableInfo ti) {
         StringBuilder ix = new StringBuilder();
         for (IndexInfo ii: peadbi.getIndexInfo()) {
             //NOTE skip if a partial index (i.e. if a WHERE clause exists) as ROOM does not support partial indexes
@@ -244,7 +244,7 @@ public class RoomEntityBuilder {
      * @param peadbi    The PreExistingAssetDBInspect object in which the child table is located
      * @return          The generated foreignKeys clause
      */
-    private static String buildForeignKeys(TableInfo ti, PreExistingAssetDBInspect peadbi) {
+    private static String buildForeignKeys(TableInfo ti, PreExistingFileDBInspect peadbi) {
 
         boolean afterfirstfkstart = false;
 
