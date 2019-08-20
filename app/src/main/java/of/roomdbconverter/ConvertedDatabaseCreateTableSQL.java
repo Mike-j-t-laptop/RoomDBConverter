@@ -17,7 +17,7 @@ public class ConvertedDatabaseCreateTableSQL {
      * @param ti
      * @return
      */
-    public static String createTableCreateSQL(PreExistingAssetDBInspect peadbi, TableInfo ti) {
+    public static String createTableCreateSQL(PreExistingFileDBInspect peadbi, TableInfo ti) {
 
         StringBuilder crtsql = new StringBuilder();
         String columnsToCode = getColumnDefineClauses(ti);

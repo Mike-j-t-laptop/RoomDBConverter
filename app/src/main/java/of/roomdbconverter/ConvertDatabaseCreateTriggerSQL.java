@@ -11,7 +11,7 @@ public class ConvertDatabaseCreateTriggerSQL {
      * @param peadbi    The PreExistinAssetDBInspect object
      * @return          The SQL to create the Trigger WARNING original SQL is used
      */
-    public static ArrayList<String> buildTriggerCreateSQL(PreExistingAssetDBInspect peadbi) {
+    public static ArrayList<String> buildTriggerCreateSQL(PreExistingFileDBInspect peadbi) {
         ArrayList<String> triggerCreateSQL = new ArrayList<>();
         for(TriggerInfo tri: peadbi.getTriggerInfo()) {
             String tableNameToCode = tri.getTriggerTable();

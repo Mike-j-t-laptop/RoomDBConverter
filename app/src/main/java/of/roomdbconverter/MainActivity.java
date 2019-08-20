@@ -45,16 +45,15 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     Context mContext;
     Button mConvert;
-    ListView mDBAssetsListView, mDBEntityLisView;
+    ListView mDBEntityLisView, mDBFilesListView;
     LinearLayout mDBInfoHdr, mDBInfo,  mDBPathInfoHdr, mConvertSection;
     TextView mSelectedDBInfoHdr, mDBName, mDBVersion,  mDBDiskSize, mDBPath,
             mDBTablesHdr, mDBColumnsHdr, mDBIndexesHdr, mDBFrgnKeysHdr, mDBTriggersHdr,mDBViewsHdr,
             mDBTables,mDBColumns, mDBIndexes, mDBFrgnKeys, mDBTriggers, mDBViews, mDBEntitiesListHdr;
     EditText mConversionDirectoryEditText, mConversionEntityDirectoryEditText, mConversionDaoDirectoryEditText;
 
-    ArrayList<AssetEntry> mDBAssets;
-    ArrayList<File> mDBFiles;
-    ArrayAdapter<AssetEntry> mDBAssetsAA;
+    ArrayList<FileEntry> mDBFiles;
+    ArrayAdapter<FileEntry> mDBFilesAA;
     EntityTableAdapter mDBTablesAA;
     EntityColumnAdapter mDBColumnsAA;
     EntityIndexAdapter mDBIndexesAA;
@@ -62,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     EntityTriggerAdapter mDBTriggersAA;
     EntityViewAdapter mDBViewsAA;
 
-    ArrayList<PreExistingAssetDBInspect> mPEADBIList;
+    //ArrayList<PreExistingAssetDBInspect> mPEADBIList;
+    ArrayList<PreExistingFileDBInspect> mPEFDBIList;
     ArrayList<TableInfo> mCurrentTables;
     ArrayList<ForeignKeyInfo> mCurrentForeignKeys;
     ArrayList<ColumnInfo> mCurrentColumns;
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     ArrayList<TriggerInfo> mCurrentTriggers;
     ArrayList<ViewInfo> mCurrentViews;
     PreExistingAssetDBInspect mCurrentPEADBI;
+    PreExistingFileDBInspect mCurrentPEFDBI;
 
     String mConversionDirectory = "", mEntityDirectory = "java", mDAODirectory = mEntityDirectory;
 
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         mConvert = this.findViewById(R.id.convert);
 
-        mDBAssetsListView = this.findViewById(R.id.dbassetsList);
+        mDBFilesListView = this.findViewById(R.id.dbfileslist);
         (mDBEntityLisView = this.findViewById(R.id.dbentitieslist)).setVisibility(View.GONE);
         (mSelectedDBInfoHdr = this.findViewById(R.id.selectedassetheading)).setVisibility(View.GONE);
         (mDBInfoHdr = this.findViewById(R.id.dbinfohdr)).setVisibility(View.GONE);
@@ -111,11 +112,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mConversionEntityDirectoryEditText = this.findViewById(R.id.conversion_entity_directory);
         mConversionDaoDirectoryEditText = this.findViewById(R.id.conversion_dao_directory);
 
-        manageDBAssetsListView();
+        manageDBFilesListView();
         manageDatabaseInformationListeners();
         manageConvertButton();
         manageConversionEditTexts();
-        mDBAssets = RetrieveDBAssets.getAssets(this);
         mDBFiles = RetrieveDBFiles.getFiles();
 
     }
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         showConversionResults(
                                 (
                                         ConvertPreExistingDatabaseToRoom.Convert(
-                                                mContext,mCurrentPEADBI, BASECONVERTDIRECTORY + File.separator +
+                                                mContext,mCurrentPEFDBI, BASECONVERTDIRECTORY + File.separator +
                                                 mConversionDirectoryEditText.getText().toString(),
                                                 mConversionEntityDirectoryEditText.getText().toString(),
                                                 mDAODirectory,ConvertPreExistingDatabaseToRoom.MESSAGELEVEL_ERROR)== 0));
@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
      * been made to the underlying data.
      *
      */
+    /*
     private void manageDBAssetsListView() {
         mDBAssets = RetrieveDBAssets.getAssets(this);
         if (mDBAssetsAA == null) {
@@ -193,11 +194,25 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             mDBAssetsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    hanldeSelected(mDBAssetsAA.getItem(position));
+                    hanldle(mDBAssetsAA.getItem(position));
                 }
             });
         } else {
             mDBAssetsAA.notifyDataSetChanged();
+        }
+    }
+    */
+    private void manageDBFilesListView() {
+        mDBFiles = RetrieveDBFiles.getFiles();
+        if (mDBFilesAA == null) {
+            mDBFilesAA = new ArrayAdapter<>(this,R.layout.filelist_layout,R.id.filepath,mDBFiles);
+            mDBFilesListView.setAdapter(mDBFilesAA);
+            mDBFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    handleSelectedFile((mDBFilesAA.getItem(position)).getmFile());
+                }
+            });
         }
     }
 
@@ -394,8 +409,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
      * 7; set the Database Information layout to VISIBLE as data now exists
      * 8; set the various TextViews with the respective values
      * 9; call manageDBEntityListView to setup/refresh the Database Information List
-     * @param ae    The clicked AssetEntry
+     * //@param ae    The clicked AssetEntry
      */
+
+    /*
     public void hanldeSelected(AssetEntry ae) {
         if (mPEADBIList == null) {
             mPEADBIList = new ArrayList<>();
@@ -439,16 +456,61 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mDBPath.setText(mCurrentPEADBI.getAssetPath());
         manageDBEntityListView();
     }
+    */
+
+    public void handleSelectedFile(File f) {
+        if (mPEFDBIList == null) {
+            mPEFDBIList = new ArrayList<>();
+        }
+        boolean alreadyExits = false;
+        int i = 0;
+        for (PreExistingFileDBInspect p: mPEFDBIList) {
+            if (p.getDatabasePath().equals(f.getPath())) {
+                alreadyExits = true;
+                break;
+            }
+            i++;
+        }
+        if (alreadyExits) {
+            mCurrentPEFDBI = mPEFDBIList.get(i);
+        } else {
+            mPEFDBIList.add(new PreExistingFileDBInspect(this,f));
+            mCurrentPEFDBI = mPEFDBIList.get(mPEFDBIList.size()-1);
+        }
+        mConversionDirectory = getResources().getString(R.string.convert_main_directory_prefix) + mCurrentPEFDBI.getDatabaseName();
+        mConvertSection.setVisibility(View.VISIBLE);
+        mConversionDirectoryEditText.setText(mConversionDirectory);
+        mConversionEntityDirectoryEditText.setText(mEntityDirectory);
+        mConversionDaoDirectoryEditText.setText(mDAODirectory);
+        mSelectedDBInfoHdr.setVisibility(View.VISIBLE);
+        mDBInfo.setVisibility(View.VISIBLE);
+        mDBInfoHdr.setVisibility(View.VISIBLE);
+        mDBPathInfoHdr.setVisibility(View.VISIBLE);
+        mDBEntityLisView.setVisibility(View.VISIBLE);
+        mDBEntitiesListHdr.setVisibility(View.VISIBLE);
+        mDBName.setText(mCurrentPEFDBI.getDatabaseName());
+        mDBVersion.setText(String.valueOf(mCurrentPEFDBI.getDatabaseVersion()));
+        mDBDiskSize.setText(String.valueOf(mCurrentPEFDBI.getDatabaseDiskSize()));
+        mDBTables.setText(String.valueOf(mCurrentPEFDBI.getTableCount()));
+        mDBColumns.setText(String.valueOf(mCurrentPEFDBI.getColumnCount()));
+        mDBIndexes.setText(String.valueOf(mCurrentPEFDBI.getIndexCount()));
+        mDBFrgnKeys.setText(String.valueOf(mCurrentPEFDBI.getForeignKeyCount()));
+        mDBTriggers.setText(String.valueOf(mCurrentPEFDBI.getTriggerCount()));
+        mDBViews.setText(String.valueOf(mCurrentPEFDBI.getViewCount()));
+        mDBPath.setText(mCurrentPEFDBI.getDatabasePath());
+        manageDBEntityListView();
+
+    }
 
     /**
-     * Rebuild the Entity Lists according to the current PEADBI
+     * Rebuild the Entity Lists according to the current PEFDBI
      */
     private void setDBEntityLists() {
         if (mCurrentTables == null) {
             mCurrentTables = new ArrayList<>();
         }
         mCurrentTables.clear();
-        for (TableInfo ti: mCurrentPEADBI.getTableInfo()) {
+        for (TableInfo ti: mCurrentPEFDBI.getTableInfo()) {
             TableInfo newti = new TableInfo(ti.getTableName(),ti.getSQL(),
                     ti.getColumns(), ti.getColumnLookup(),
                     ti.getForeignKeyList(), ti.getPrimaryKeyList(), ti.getPrimaryKeyListAlternativeNames(),
@@ -461,7 +523,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             mCurrentColumns = new ArrayList<>();
         }
         mCurrentColumns.clear();
-        for (ColumnInfo ci: mCurrentPEADBI.getColumnInfo()) {
+        for (ColumnInfo ci: mCurrentPEFDBI.getColumnInfo()) {
             ColumnInfo newci = new ColumnInfo(
                     ci.getColumnName(), ci.getAlternativeColumnName(),
                     ci.getOwningTable(),
@@ -482,7 +544,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             mCurrentIndexes = new ArrayList<>();
         }
         mCurrentIndexes.clear();
-        for (IndexInfo ii: mCurrentPEADBI.getIndexInfo()) {
+        for (IndexInfo ii: mCurrentPEFDBI.getIndexInfo()) {
             ArrayList<IndexColumnInfo> newici = new ArrayList<>();
             for (IndexColumnInfo ici: ii.getColumns()) {
                 newici.add(new IndexColumnInfo(ici.getColumnName(),ici.getColumnIndexRank(),ici.getColumnTableRank()));
@@ -495,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             mCurrentForeignKeys = new ArrayList<>();
         }
         mCurrentForeignKeys.clear();
-        for(TableInfo ti: mCurrentPEADBI.getTableInfo()) {
+        for(TableInfo ti: mCurrentPEFDBI.getTableInfo()) {
             ArrayList<ForeignKeyInfo> newfki = new ArrayList<>();
             for (ForeignKeyInfo ifki: ti.getForeignKeyList()) {
                 newfki.add(new ForeignKeyInfo(ti.getTableName(),ifki.getParentTableName(),ifki.getChildColumnNames(),ifki.getParentColumnNames(),ifki.getOnUpdate(),ifki.getOnDelete(),ifki.isDeferable()));
@@ -507,7 +569,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             mCurrentTriggers = new ArrayList<>();
         }
         mCurrentTriggers.clear();
-        for (TriggerInfo tri: mCurrentPEADBI.getTriggerInfo()) {
+        for (TriggerInfo tri: mCurrentPEFDBI.getTriggerInfo()) {
             TriggerInfo newtri = new TriggerInfo(tri.getTriggerName(),tri.getTriggerTable(),tri.getTriggerSQL());
             mCurrentTriggers.add(newtri);
         }
@@ -515,7 +577,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             mCurrentViews = new ArrayList<>();
         }
         mCurrentViews.clear();
-        for (ViewInfo vi: mCurrentPEADBI.getViewInfo()) {
+        for (ViewInfo vi: mCurrentPEFDBI.getViewInfo()) {
             ViewInfo newvi = new ViewInfo(vi.getViewName(),vi.getViewTable(),vi.getViewSQL());
             mCurrentViews.add(newvi);
         }
@@ -550,7 +612,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         ) {
             return;
         }
-        for (TableInfo ti: mCurrentPEADBI.getTableInfo()) {
+        for (TableInfo ti: mCurrentPEFDBI.getTableInfo()) {
             if (ti.getTableName().equals(original.getOwningTable())) {
                 for (ColumnInfo ci: ti.getColumns()) {
                     if (ci.getColumnName().equals(original.getColumnName())) {
@@ -618,7 +680,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     }
 
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -626,7 +687,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     @Override
     protected void onDestroy() {
-        for (PreExistingAssetDBInspect p: mPEADBIList) {
+        for (PreExistingFileDBInspect p: mPEFDBIList) {
             p.closeInspectionDatabase();
         }
         super.onDestroy();

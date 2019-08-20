@@ -1,11 +1,23 @@
 package of.roomdbconverter;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 
 public class FileEntry {
+    private File mFile;
 
-    public static final int BUFFERSIZE = 4 *1024 * 1024;
+    public FileEntry(File file) {
+        mFile = file;
+    }
 
-    File mFile;
+    public File getmFile() {
+        return mFile;
+    }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return mFile.getPath();
+    }
 }

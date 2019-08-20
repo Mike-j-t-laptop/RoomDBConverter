@@ -14,7 +14,7 @@ public class ConvertDatabaseCreateIndexesSQL {
      */
     private static final String CREATEINDEXSTART = "CREATE ";
     private static final String CREATEINDEXINDEX = " INDEX IF NOT EXISTS ";
-    public static ArrayList<String> buildIndexCreateSQL(PreExistingAssetDBInspect peadbi) {
+    public static ArrayList<String> buildIndexCreateSQL(PreExistingFileDBInspect peadbi) {
         ArrayList<String> indexCreateSQL = new ArrayList<>();
         for (IndexInfo ii: peadbi.getIndexInfo()) {
             StringBuilder idx = new StringBuilder().append(CREATEINDEXSTART);
