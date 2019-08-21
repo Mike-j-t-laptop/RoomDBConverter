@@ -85,7 +85,7 @@ public class ConvertPreExistingDatabaseToRoom {
         }
         resultcode--;
         if (!createConvertedDatabase(peadbi)){
-            addMessage( new Message(7,MESSAGELEVEL_ERROR,"Error(s) converting the Database from " + peadbi.getDatabasePath() + " to " + peadbi.getDatabasePath()));
+            addMessage( new Message(7,MESSAGELEVEL_ERROR,"Error(s) converting the Database from " + peadbi.getDatabasePath() + " to " + cd.getPath()));
             return resultcode;
         } else {
             addMessage(new Message(8,MESSAGELEVEL_INFO,

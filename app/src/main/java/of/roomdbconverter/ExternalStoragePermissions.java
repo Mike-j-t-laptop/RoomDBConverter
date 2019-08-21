@@ -3,20 +3,17 @@ package of.roomdbconverter;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.os.Build;
 
 import androidx.core.app.ActivityCompat;
 
 class ExternalStoragePermissions {
 
-    public int API_VERSION = Build.VERSION.SDK_INT;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
 
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    public static final String THISCLASS = ExternalStoragePermissions.class.getSimpleName();
-    private static final String LOGTAG = "SW_ESP";
+
 
     public ExternalStoragePermissions() {}
     // Note call this method
@@ -32,5 +29,6 @@ class ExternalStoragePermissions {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+        ((MainActivity) activity).permissionHasBeenGranted();
     }
 }
