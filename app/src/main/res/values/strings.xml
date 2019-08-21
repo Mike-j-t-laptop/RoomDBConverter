@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">RoomDBConverter</string>
     <string name="app_name_short">RoomDBConverter</string>
-    <string name="main_title">Room Asset Conversion Tool</string>
-    <string name="assetlistviewheader">Assets found (click an Asset to select/load)</string>
+    <string name="main_title">Room Pre-Existing Database Conversion Tool</string>
+    <string name="assetlistviewheader">Files found (click a File to select/convert)</string>
     <string name="selectedassetdbinfoheading">Selected Database Information</string>
     <string name="convertbutton">CONVERT</string>
     <string name="convert_result_ok">Successfully Converted</string>
@@ -13,7 +13,7 @@
     <string name="convert_dao_subdirectory_label">DAO Sub-Directory</string>
     <string name="convert_directory_empty">The Conversion Directory is Empty. Please supply a valid directory name for the conversion.</string>
     <string name="convert_entity_directory_empty">The Conversion Entity Directory is Empty. Please supply a valid directorty name for the conversion.</string>
-    <string name="convert_dao_directory_empty">The Conversion Dao Entity Directory is Empty. Please supply a valid directory name for the conversion.</string>
+    <string name="convert_dao_directory_empty">The Conversion Dao Directory is Empty. Please supply a valid directory name for the conversion.</string>
     <string name="donebutton">DONE</string>
     <string name="applychangesbutton">APPLY CHANGES</string>
     <string name="dbname">Name</string>

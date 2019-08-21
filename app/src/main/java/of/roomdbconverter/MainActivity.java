@@ -23,7 +23,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements Serializable {
+
+public class MainActivity extends AppCompatActivity implements Serializable, PermissionGranted {
 
     public static final String BASECONVERTDIRECTORY = "RoomDBConverterDBConversions";
 
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     EntityTriggerAdapter mDBTriggersAA;
     EntityViewAdapter mDBViewsAA;
 
-    //ArrayList<PreExistingAssetDBInspect> mPEADBIList;
     ArrayList<PreExistingFileDBInspect> mPEFDBIList;
     ArrayList<TableInfo> mCurrentTables;
     ArrayList<ForeignKeyInfo> mCurrentForeignKeys;
@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     ArrayList<IndexInfo> mCurrentIndexes;
     ArrayList<TriggerInfo> mCurrentTriggers;
     ArrayList<ViewInfo> mCurrentViews;
-    PreExistingAssetDBInspect mCurrentPEADBI;
     PreExistingFileDBInspect mCurrentPEFDBI;
 
     String mConversionDirectory = "", mEntityDirectory = "java", mDAODirectory = mEntityDirectory;
@@ -80,10 +79,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mContext = this;
         ENTITYTITLE = this.getResources().getStringArray(R.array.entitytypes);
         setContentView(R.layout.activity_main);
-        ExternalStoragePermissions.verifyStoragePermissions(this);
-
         mConvert = this.findViewById(R.id.convert);
-
         mDBFilesListView = this.findViewById(R.id.dbfileslist);
         (mDBEntityLisView = this.findViewById(R.id.dbentitieslist)).setVisibility(View.GONE);
         (mSelectedDBInfoHdr = this.findViewById(R.id.selectedassetheading)).setVisibility(View.GONE);
@@ -112,12 +108,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mConversionEntityDirectoryEditText = this.findViewById(R.id.conversion_entity_directory);
         mConversionDaoDirectoryEditText = this.findViewById(R.id.conversion_dao_directory);
 
+        ExternalStoragePermissions.verifyStoragePermissions(this);
         manageDBFilesListView();
         manageDatabaseInformationListeners();
         manageConvertButton();
         manageConversionEditTexts();
-        mDBFiles = RetrieveDBFiles.getFiles();
-
     }
 
     private void manageConversionEditTexts() {
@@ -174,36 +169,14 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
     }
 
-    /**
-     * Manage the list of SQlite Database assets,
-     * first; get the assets (SQLite databases only),
-     * second; if the adapter is null then instantiate it and tie it to the
-     * ListView,
-     * third; if if the adapter is null then set the item on click listener to pass
-     * the select asset to the handleSelected method
-     * fourth; if the adapter is not null, notify the adapter that changes may have
-     * been made to the underlying data.
-     *
-     */
-    /*
-    private void manageDBAssetsListView() {
-        mDBAssets = RetrieveDBAssets.getAssets(this);
-        if (mDBAssetsAA == null) {
-            mDBAssetsAA = new ArrayAdapter<>(this,R.layout.assetlist_layout,R.id.assetpath,mDBAssets);
-            mDBAssetsListView.setAdapter(mDBAssetsAA);
-            mDBAssetsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    hanldle(mDBAssetsAA.getItem(position));
-                }
-            });
-        } else {
-            mDBAssetsAA.notifyDataSetChanged();
-        }
-    }
-    */
     private void manageDBFilesListView() {
-        mDBFiles = RetrieveDBFiles.getFiles();
+        if (mDBFiles != null) {
+            mDBFiles.clear();
+        } else {
+            mDBFiles = new ArrayList<>();
+        }
+        mDBFiles.addAll(RetrieveDBFiles.getFiles());
+        if (mDBFiles == null) return;
         if (mDBFilesAA == null) {
             mDBFilesAA = new ArrayAdapter<>(this,R.layout.filelist_layout,R.id.filepath,mDBFiles);
             mDBFilesListView.setAdapter(mDBFilesAA);
@@ -213,6 +186,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                     handleSelectedFile((mDBFilesAA.getItem(position)).getmFile());
                 }
             });
+        } else {
+            mDBFilesAA.notifyDataSetChanged();
         }
     }
 
@@ -396,68 +371,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
     }
 
-    /**
-     * Handle an Asset Entry being clicked,
-     * 1; if the List of PreExisting Assets is null initialise the list as an empty ArrayList
-     * of PreExistingAssetDBInspect (PEADBI) objects,
-     * 2; search the PEADBI ArrayList to see if this asset already exists in the ArrayList,
-     * 3, if it does not already exist create a new PEADBI object,
-     * this includes importing the database (copying from the assets)
-     * 4; if imported then add the PEADBI to the ArrayList
-     * 5; if imported select the last object of the PEADBI ArrayList as the current
-     * 6, if not imported (already exists) set the current PEADBI to the matched PEADBI
-     * 7; set the Database Information layout to VISIBLE as data now exists
-     * 8; set the various TextViews with the respective values
-     * 9; call manageDBEntityListView to setup/refresh the Database Information List
-     * //@param ae    The clicked AssetEntry
-     */
-
-    /*
-    public void hanldeSelected(AssetEntry ae) {
-        if (mPEADBIList == null) {
-            mPEADBIList = new ArrayList<>();
-        }
-        boolean stored = false;
-        int i =0;
-        for (PreExistingAssetDBInspect p: mPEADBIList ) {
-            if (p.getAssetFileName().equals(ae.getAssetName()) && p.getAssetPath().equals(ae.getAssetPath()+ae.getAssetName())) {
-                stored = true;
-                break;
-            }
-            i++;
-        }
-        if (!stored) {
-            mPEADBIList.add(new PreExistingAssetDBInspect(this,ae.getAssetName(),ae.getAssetName(),ae.getAssetPath().split(File.pathSeparator)));
-            mCurrentPEADBI = mPEADBIList.get(mPEADBIList.size()-1);
-            ae.setAssetLoaded(true);
-        } else {
-            mCurrentPEADBI = mPEADBIList.get(i);
-        }
-        mConversionDirectory = getResources().getString(R.string.convert_main_directory_prefix) + mCurrentPEADBI.getDatabaseName();
-        mConvertSection.setVisibility(View.VISIBLE);
-        mConversionDirectoryEditText.setText(mConversionDirectory);
-        mConversionEntityDirectoryEditText.setText(mEntityDirectory);
-        mConversionDaoDirectoryEditText.setText(mDAODirectory);
-        mSelectedDBInfoHdr.setVisibility(View.VISIBLE);
-        mDBInfo.setVisibility(View.VISIBLE);
-        mDBInfoHdr.setVisibility(View.VISIBLE);
-        mDBPathInfoHdr.setVisibility(View.VISIBLE);
-        mDBEntityLisView.setVisibility(View.VISIBLE);
-        mDBEntitiesListHdr.setVisibility(View.VISIBLE);
-        mDBName.setText(mCurrentPEADBI.getDatabaseName());
-        mDBVersion.setText(String.valueOf(mCurrentPEADBI.getDatabaseVersion()));
-        mDBDiskSize.setText(String.valueOf(mCurrentPEADBI.getDatabaseDiskSize()));
-        mDBTables.setText(String.valueOf(mCurrentPEADBI.getTableCount()));
-        mDBColumns.setText(String.valueOf(mCurrentPEADBI.getColumnCount()));
-        mDBIndexes.setText(String.valueOf(mCurrentPEADBI.getIndexCount()));
-        mDBFrgnKeys.setText(String.valueOf(mCurrentPEADBI.getForeignKeyCount()));
-        mDBTriggers.setText(String.valueOf(mCurrentPEADBI.getTriggerCount()));
-        mDBViews.setText(String.valueOf(mCurrentPEADBI.getViewCount()));
-        mDBPath.setText(mCurrentPEADBI.getAssetPath());
-        manageDBEntityListView();
-    }
-    */
-
     public void handleSelectedFile(File f) {
         if (mPEFDBIList == null) {
             mPEFDBIList = new ArrayList<>();
@@ -499,7 +412,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mDBViews.setText(String.valueOf(mCurrentPEFDBI.getViewCount()));
         mDBPath.setText(mCurrentPEFDBI.getDatabasePath());
         manageDBEntityListView();
-
     }
 
     /**
@@ -664,6 +576,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         });
     }
 
+    @Override
+    public void permissionHasBeenGranted() {
+        mDBFiles = RetrieveDBFiles.getFiles();
+        manageDBFilesListView();
+    }
+
     private class CustomTextWatcher implements TextWatcher {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -678,6 +596,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             setConvertButtonFocusability();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        manageDBFilesListView();
     }
 
     @Override
