@@ -1,13 +1,13 @@
 # RoomDBConverter
 Utility App to convert existing databases to Room databases including generating the Entity and basic DAO code.
 
-Intended to be a development App that you run from the IDE used for developing an App after copying the database(s) t be converted into the assets folder.
+Intended to be a development App that you run from the IDE used for developing an App after copying the database(s) to be converted into the External Public Storage (sdcard).
 
-The App searches the assets folder and sub-folders checking to see if any files have the SQlite Header.
+The App searches the directory and sub-folders checking to see if any files have the SQLite Header.
 
-The assets that are deemed as SQLite databases are listed. 
+The files that are deemed as SQLite databases are listed. 
 
-Clicking an asset in the list list database information and initially a list of the databases tables.
+Clicking a file in the list, lists database information and initially a list of the databases tables.
 
 Clicking the headings for Tables/Columns/Indexes/Triggers/FK/Views will switch to displaying relevant information.
 
