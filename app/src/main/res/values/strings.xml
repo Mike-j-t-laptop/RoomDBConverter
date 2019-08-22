@@ -70,6 +70,12 @@
     <string name="entitytriggernamehdr">Trigger Name</string>
     <string name="entitytriggertablenamehdr">Table Name</string>
 
+    <string name="entityindexnamehdr">Index Name</string>
+    <string name="entityindextablenamehdr">@string/entitytablenamehdr</string>
+    <string name="entityindexcolumnnameshdr">@string/entitytablecolcounthdr</string>
+    <string name="entityindexwhereclausehdr">Where Clause</string>
+    <string name="entityindexuniquehdr">Unique</string>
+
     <string name="entityviewnamehdr">View Name</string>
 
     <array name="entitytypes">

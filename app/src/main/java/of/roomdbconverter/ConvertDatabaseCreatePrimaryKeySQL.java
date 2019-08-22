@@ -38,7 +38,7 @@ public class ConvertDatabaseCreatePrimaryKeySQL {
             if (columnNameToCode.length() < 1) {
                 columnNameToCode = ci.getColumnName();
             }
-            pkeys.append("`"+ columnNameToCode+ "`");
+            pkeys.append("`").append(columnNameToCode).append("`");
             afterFirst = true;
         }
         return pkeys.append(PRIMARYKEYCLAUSEEND).toString();

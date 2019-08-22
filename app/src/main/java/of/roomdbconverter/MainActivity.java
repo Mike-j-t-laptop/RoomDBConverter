@@ -144,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements Serializable, Per
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-
                         showConversionResults(
                                 (
                                         ConvertPreExistingDatabaseToRoom.Convert(
@@ -330,6 +329,7 @@ public class MainActivity extends AppCompatActivity implements Serializable, Per
                     //intent.putExtra(INTENTKEY_TABLEINFO,(TableInfo)x);
                     //startActivityForResult(intent,REQUESTCODE_TABLEINFO);
                 }
+                //TODO Not Really supported as yet, needs work to properly rename SQlite entities that use a renamed column
                 if (x instanceof ColumnInfo) {
                     Intent intent = new Intent(view.getContext(),ColumnInfoActivity.class);
                     intent.putExtra(INTENTKEY_COLUMNINFO,(ColumnInfo)x);

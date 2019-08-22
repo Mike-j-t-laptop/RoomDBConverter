@@ -30,16 +30,18 @@ public class ConvertDatabaseCreateColumnDefineSQL {
             }
             // Build the initial part of the definition column name and type affinity
             // Noting that type affinity is strictly INTEGER, TEXT, REAL or BLOB
-            columns.append("`"+columnToCode+"`").append(" ").append(ci.getFinalTypeAffinity());
+            columns.append("`").append(columnToCode).append("`").append(" ").append(ci.getFinalTypeAffinity());
             // If the column is an Alias of the rowid include PRIMARY KEY AUTOINCREMENT NOT NULL
             // again Room is pretty strict and appears to required the inefficient AUTOINCREMENT
             if (ci.isRowidAlias() || ci.isAutoIncrementCoded()) {
                 columns.append(ROWIDALIAS);
             }
-            //Apply NOT NULL if the column has NOT NULL or if the column is a Foreign Key child but not
-            // if the column is
+            //Apply NOT NULL if the column has NOT NULL
+            // or if the column is a Foreign Key child
+            // or if the column is part of a primary key
+            // but not if the column is an alias of the rowid column (as already coded )
             if (
-                    (isColumnPartForeignKeyChild(ti,ci.getColumnName()) || ci.isNotNull())
+                    (isColumnPartForeignKeyChild(ti,ci.getColumnName()) || ci.isNotNull() || (ci.getPrimaryKeyPosition() > 0))
                             &&
                             !(ci.isAutoIncrementCoded() || ci.isRowidAlias())
             ) {

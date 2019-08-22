@@ -36,16 +36,16 @@ public class ConvertDatabaseCreateForeignKeySQL {
                     fkeys.append(",");
                 }
                 afterFirst = true;
-                fkeys.append("`"+getColumnNameToCode(s,ti)+"`");
+                fkeys.append("`").append(getColumnNameToCode(s,ti)).append("`");
             }
             afterFirst = false;
-            fkeys.append(") ").append(FOREIGNKEYCLAUSEPARENTSTART).append("`"+parentTableName+"`").append("(");
+            fkeys.append(") ").append(FOREIGNKEYCLAUSEPARENTSTART).append("`").append(parentTableName).append("`").append("(");
             for(String s: fki.getParentColumnNames()) {
                 if (afterFirst) {
                     fkeys.append(",");
                 }
                 afterFirst = true;
-                fkeys.append("`"+ getColumnNameToCode(s,parentti) + "`");
+                fkeys.append("`").append(getColumnNameToCode(s,parentti)).append("`");
             }
             fkeys.append(")");
             if (fki.getOnUpdate() > ForeignKeyInfo.ACTION_NOACTION) {
