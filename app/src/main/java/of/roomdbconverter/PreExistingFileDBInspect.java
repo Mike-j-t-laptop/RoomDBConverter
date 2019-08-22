@@ -333,7 +333,7 @@ public class PreExistingFileDBInspect {
             currentFKI.setDeferable(SQLCreateInterrogator.isColumnDeferrable(ti,currentFKI.getChildColumnNames()));
             currentFKID = retrievedFKID;
         }
-
+        csr.close();
         if (currentFKID > -1) {
             fki.add(currentFKI);
         }

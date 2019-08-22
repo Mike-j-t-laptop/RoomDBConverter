@@ -108,9 +108,6 @@ public class RoomEntityBuilder {
                 entityCode.add(INDENT + ENTITYNOTNULL);
                 notNullCoded = true;
             }
-            if (!notNullCoded) {
-                //entityCode.add(INDENT + ENTITYNOTNULL);
-            }
             entityCode.add(INDENT + COLUMNINFOSTART + columnNameToCode + COLUMNINFOEND);
             entityCode.add(INDENT + MEMBERSTART + ci.getObjectElementType() + " " + lowerise(ci.getColumnName()) + MEMBEREND);
             // Build getter code
@@ -230,7 +227,11 @@ public class RoomEntityBuilder {
             if (afterfirst) {
                 ixcols.append(",");
             }
-            ixcols.append("\"").append(swapEnclosersForRoom(ci.getAlternativeColumnName())).append("\"");
+            String columnToCode = swapEnclosersForRoom(ci.getAlternativeColumnName());
+            if (columnToCode.length() < 1) {
+                columnToCode = ci.getColumnName();
+            }
+            ixcols.append("\"").append(columnToCode).append("\"");
             afterfirst = true;
         }
         return ix.append(ixcols.toString()).append("})").toString();

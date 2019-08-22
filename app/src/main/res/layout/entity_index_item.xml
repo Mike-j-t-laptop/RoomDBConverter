@@ -11,7 +11,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text="Index Name"
+            android:text="@string/entityindexnamehdr"
             android:textColor="@color/colorTextLight"
             />
         <TextView
@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text="Table Name"
+            android:text="@string/entityindextablenamehdr"
             android:textColor="@color/colorTextLight"
             />
         <TextView
@@ -47,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text="Column Names"
+            android:text="@string/entityindexcolumnnameshdr"
             android:textColor="@color/colorTextLight"
             />
         <TextView
@@ -65,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text="Where Clause"
+            android:text="@string/entityindexwhereclausehdr"
             android:textColor="@color/colorTextLight"
             />
         <TextView
@@ -83,7 +83,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text="Unique"
+            android:text="@string/entityindexuniquehdr"
             android:textColor="@color/colorTextLight"
             />
         <TextView
@@ -101,7 +101,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text="SQL"
+            android:text="@string/entitySQL"
             android:textColor="@color/colorTextLight"
             />
         <TextView

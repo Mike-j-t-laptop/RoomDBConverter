@@ -212,7 +212,7 @@ public class ConvertPreExistingDatabaseToRoom {
             try {
                 Log.d(TAG,"Creating table " + ti.getTableName() + " using SQL as :-" + "\n\t" + tableCreateSQL);
                 // Create the Tables
-                db.execSQL(tableCreateSQL.toString());
+                db.execSQL(tableCreateSQL);
 
 
             } catch (SQLiteException e) {

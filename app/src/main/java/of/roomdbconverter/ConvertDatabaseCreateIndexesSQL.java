@@ -38,14 +38,14 @@ public class ConvertDatabaseCreateIndexesSQL {
             if (tableInfoToUse == null) {
                 continue;
             }
-            idx.append("`" + tableNameToCode + "`").append("(");
+            idx.append("`").append(tableNameToCode).append("`").append("(");
             boolean afterFirst = false;
             for (IndexColumnInfo ici: ii.getColumns()) {
                 if (afterFirst) {
                     idx.append(",");
                 }
                 afterFirst = true;
-                idx.append("`"+getColumnNameToCode(ici.getColumnName(),tableInfoToUse)+"`");
+                idx.append("`").append(getColumnNameToCode(ici.getColumnName(),tableInfoToUse)).append("`");
             }
             idx.append(") ");
             String whereClause = ii.getWhereClause();

@@ -27,7 +27,7 @@ public class ConvertedDatabaseCreateTableSQL {
         if (tableNameToCode.length() < 1) {
             tableNameToCode = ti.getTableName();
         }
-        crtsql.append(CREATESTART).append("`" + tableNameToCode + "`").append(CREATEDEFINESTART).append(columnsToCode);
+        crtsql.append(CREATESTART).append("`").append(tableNameToCode).append("`").append(CREATEDEFINESTART).append(columnsToCode);
         if (primaryKeysToCode.length() > 0) {
             crtsql.append(",").append(primaryKeysToCode);
         }
