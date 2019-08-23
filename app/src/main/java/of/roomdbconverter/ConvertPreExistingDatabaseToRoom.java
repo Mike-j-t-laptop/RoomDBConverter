@@ -203,6 +203,10 @@ public class ConvertPreExistingDatabaseToRoom {
             if (ti.getTableName().equals(SQLiteConstants.ANDROID_METADATA_TABLE)) {
                 continue;
             }
+            if (ti.isVirtualTable()) {
+                addMessage(new Message(101,MESSAGELEVEL_WARNING,"VIRTUAL table was skipped (unsupported)."));
+                continue;
+            }
             String tableNameToCode = swapEnclosersForRoom(ti.getEnclosedTableName());
             if (tableNameToCode.length() < 1) {
                 tableNameToCode = swapEnclosersForRoom(ti.getTableName());
@@ -224,6 +228,7 @@ public class ConvertPreExistingDatabaseToRoom {
 
             //String tableNameToCode = "main." + "`" + swapEnclosersForRoom(ti.getEnclosedTableName()) + "`";
             long originalRowCount = DatabaseUtils.queryNumEntries(db,INSPECTDBATTACHNAME + "." + ti.getTableName());
+            totalOriginalRows = totalOriginalRows + originalRowCount;
             Cursor csr1 = db.query(INSPECTDBATTACHNAME + "." + ti.getTableName(),new String[]{"count()"},null,null,null,null,null);
             if (csr1.moveToFirst()) {
                 tor = tor + csr1.getLong(0);
@@ -234,7 +239,7 @@ public class ConvertPreExistingDatabaseToRoom {
             try {
                 db.execSQL(insertSQL);
                 long convertedRowCount = DatabaseUtils.queryNumEntries(db,tableNameToCode);
-                totalOriginalRows = totalOriginalRows + originalRowCount;
+
                 totalCopiedRows = totalCopiedRows + convertedRowCount;
                 Cursor csr2 = db.query(tableNameToCode,new String[]{"count()"},null,null,null,null,null);
                 if (csr2.moveToFirst()) {

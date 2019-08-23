@@ -17,6 +17,7 @@ public class TableInfo implements java.io.Serializable {
     private int referencelevel, mIndexCount, mTriggerCount;
     private boolean mRowid;
     private boolean mRoomTable;
+    private boolean mVirtualTable = false;
 
     public TableInfo(String tablename,
                      String SQL,ArrayList<ColumnInfo> columnInfo,
@@ -41,6 +42,7 @@ public class TableInfo implements java.io.Serializable {
         this.mRowid = rowid;
         this.mRoomTable = roomTable;
         this.mEnclosedTableName = SQLCreateInterrogator.getEnclosedTableName(this);
+        this.mVirtualTable = isVirtualTable(SQL);
     }
 
     public TableInfo(String tablename, String SQL) {
@@ -119,6 +121,12 @@ public class TableInfo implements java.io.Serializable {
         this.mRoomTable = roomTable;
     }
 
+    public boolean isVirtualTable() {return mVirtualTable; }
+
+    public void setVirtualTable(boolean virtualTable) {
+        this.mVirtualTable = virtualTable;
+    }
+
     public int getIndexCount() {
         return mIndexCount;
     }
@@ -193,6 +201,10 @@ public class TableInfo implements java.io.Serializable {
 
     private boolean isWithoutRowid(String SQL) {
         return !SQL.replace(" ","").toUpperCase().equals(SQLiteConstants.SQLKEYWORD_WITHOUTROWID.replace(" ",""));
+    }
+
+    private boolean isVirtualTable(String SQL) {
+        return SQLCreateInterrogator.removeDoubleSpaces(SQL).toUpperCase().contains(SQLiteConstants.CLAUSE_CREATEVIRTTBL);
     }
 
     public ColumnInfo getColumnInfoByName(String columnName) {
