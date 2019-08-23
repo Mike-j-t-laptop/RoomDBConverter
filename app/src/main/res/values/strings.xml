@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">RoomDBConverter</string>
-    <string name="app_name_short">RoomDBConverter</string>
     <string name="main_title">Room Pre-Existing Database Conversion Tool</string>
     <string name="assetlistviewheader">Files found (click a File to select/convert)</string>
     <string name="selectedassetdbinfoheading">Selected Database Information</string>
@@ -23,13 +22,13 @@
     <string name="dbtablecount">Tables</string>
     <string name="dbcolumncount">Columns</string>
     <string name="dbindexcount">Indexes</string>
-    <string name="dbindexcolumncount">IndexColumns</string>
     <string name="dbtriggercount">Triggers</string>
     <string name="dbviewcount">Views</string>
     <string name="dbforeignkeycount">FK</string>
 
 
     <string name="entitywarningroommastertable">Indicates a room master table, this will be omitted from the converted database.</string>
+    <string name="entitytablevirtualtable">Indicates a virtual table, this will be omitted from the converted database.</string>
     <string name="entitywarningautoincrementadd">AUTOINCREMENT will be added.</string>
     <string name="entitywarningnumerictype">NUMERIC type detected. Using TEXT and therefore object meber will be String </string>
     <string name="entitywarningdefaultvalue">A default value has been detected. You may wish to set the object member to default to the value.</string>
@@ -58,7 +57,6 @@
     <string name="entitycolumnobjectelementtype">Object Element Type</string>
     <string name="entitycannotbechanged">Cannot be edited here.</string>
 
-    <string name="entityfkeyname">Foreign Key Name</string>
     <string name="entityfkeyparenttablenamehdr">Parent Table</string>
     <string name="entityfkeychildtablenamehdr">Child Table</string>
     <string name="entityfkeyparentcolumnshdr">Parent Columns</string>

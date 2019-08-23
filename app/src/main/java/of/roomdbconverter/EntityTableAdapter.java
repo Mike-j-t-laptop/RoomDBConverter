@@ -41,15 +41,19 @@ public class EntityTableAdapter extends ArrayAdapter {
         TextView primary_key_list = listItemView.findViewById(R.id.primary_keys);
         TextView sql = listItemView.findViewById(R.id.table_sql);
 
+        tblname.setBackgroundColor(color_normal);
         if ((currentTI != null ? currentTI.getTableName() : null) != null) {
             tblname.setText(currentTI.getTableName());
         }
         if (currentTI.isRoomTable()) {
             tblname.setBackgroundColor(color_warning_high);
             tblname.setText(currentTI.getTableName() + "\n\t" + getContext().getResources().getString(R.string.entitywarningroommastertable));
-        } else {
-            tblname.setBackgroundColor(color_normal);
         }
+        if (currentTI.isVirtualTable()) {
+            tblname.setBackgroundColor(color_warning_high);
+            tblname.setText(currentTI.getTableName() + "\n\t" + getContext().getResources().getString(R.string.entitytablevirtualtable));
+        }
+
         encltblname.setText(currentTI.getEnclosedTableName());
         col_count.setText(String.valueOf(currentTI.getColumns().size()));
         fkey_count.setText(String.valueOf(currentTI.getForeignKeyList().size()));

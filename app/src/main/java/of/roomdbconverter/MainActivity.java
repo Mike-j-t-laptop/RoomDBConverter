@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements Serializable, PermissionGranted {
+public class MainActivity extends AppCompatActivity implements Serializable, PermissionGranted, FileListBuilt {
 
     public static final String BASECONVERTDIRECTORY = "RoomDBConverterDBConversions";
 
@@ -108,10 +108,15 @@ public class MainActivity extends AppCompatActivity implements Serializable, Per
         mConversionEntityDirectoryEditText = this.findViewById(R.id.conversion_entity_directory);
         mConversionDaoDirectoryEditText = this.findViewById(R.id.conversion_dao_directory);
 
+        //Request External Public Storage Write (and therefore READ) permission
         ExternalStoragePermissions.verifyStoragePermissions(this);
+        //Poplaute the Files ListView
         manageDBFilesListView();
+        // Manage Database Information Listeners to swap Entity ListViews when appropriate heading/entity count is clicked
         manageDatabaseInformationListeners();
+        // Manage the Convert Button
         manageConvertButton();
+        // Manage the conversion input edit texts
         manageConversionEditTexts();
     }
 
@@ -169,12 +174,15 @@ public class MainActivity extends AppCompatActivity implements Serializable, Per
     }
 
     private void manageDBFilesListView() {
-        if (mDBFiles != null) {
-            mDBFiles.clear();
-        } else {
-            mDBFiles = new ArrayList<>();
-        }
-        mDBFiles.addAll(RetrieveDBFiles.getFiles());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fileListBuilt(RetrieveDBFiles.getFiles());
+            }
+        }).start();
+    }
+
+    private void manageDBFilesListViewAfterRetrieve() {
         if (mDBFiles == null) return;
         if (mDBFilesAA == null) {
             mDBFilesAA = new ArrayAdapter<>(this,R.layout.filelist_layout,R.id.filepath,mDBFiles);
@@ -578,8 +586,23 @@ public class MainActivity extends AppCompatActivity implements Serializable, Per
 
     @Override
     public void permissionHasBeenGranted() {
-        mDBFiles = RetrieveDBFiles.getFiles();
+        //mDBFiles = RetrieveDBFiles.getFiles();
         manageDBFilesListView();
+    }
+
+    @Override
+    public void fileListBuilt(ArrayList<FileEntry> fileList) {
+        if (mDBFiles == null) {
+            mDBFiles = new ArrayList<>();
+        }
+        mDBFiles.clear();
+        mDBFiles.addAll(fileList);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                manageDBFilesListViewAfterRetrieve();
+            }
+        });
     }
 
     private class CustomTextWatcher implements TextWatcher {
